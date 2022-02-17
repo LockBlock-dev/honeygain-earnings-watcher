@@ -21,7 +21,7 @@ module.exports = {
 
     authTokens: ["AUTH TOKEN 1", "AUTH TOKEN 2"], //see https://github.com/LockBlock-dev/honeygain.js/blob/master/Authorization.md
 
-    modes: ["total"], //you can put one mode or all of them
+    modes: ["total", "payout"], //you can put one mode or all of them
 
     delay: 40, //delay before updating earnings
 };
@@ -40,11 +40,13 @@ Please check this [link](https://github.com/LockBlock-dev/honeygain.js/blob/mast
 -   **modes**:
     -   total:  
         ![](total_preview.jpg)
+    -   payout:  
+        ![](payout_preview.jpg)
 -   **delay**: the delay before updating the earnings
 
 ## How does it work
 
-The script checks every minute if it is an exact hour (17:00, 8:00, ...). Then it waits 40 seconds to allow all earnings to update. After that it gets your earnings with the provided token. Finally, it calculates the difference between your previous balance and the new one and sends the results to the Discord WebHook.
+The script checks every minute if it is an exact hour (17:00, 8:00, ...). Then it waits 40 seconds to allow all earnings to update. After that it gets your earnings with the provided token. Finally, it calculates the difference between your previous balance and the new one, checks if any of the account can request their earnings and sends the results to the Discord WebHook.
 
 This means the webhook message will be sent at XX:00:40. Don't panic if you don't see any messages in the first few seconds.
 

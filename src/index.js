@@ -4,6 +4,7 @@ const { Client } = require("honeygain.js");
 const { Webhook } = require("simple-discord-webhooks");
 const { log, delay, getOld } = require("./util.js");
 const handleTotal = require("./handleTotal.js");
+const handlePayout = require("./handlePayout.js");
 const config = require("../config.js");
 const pkg = require("../package.json");
 
@@ -55,6 +56,7 @@ const run = async () => {
 
         const me = await clients[i].me();
         clients[i].ref = me.data.referral_code;
+        clients[i].email = me.data.email;
 
         if (!fs.existsSync("./data/")) fs.mkdirSync("./data");
         if (!fs.existsSync(`./data/${clients[i].ref}`)) fs.mkdirSync(`./data/${clients[i].ref}`);
@@ -88,14 +90,12 @@ const run = async () => {
 
     log("Waiting for a balance update...", "info");
 
-    await checkUpdate();
-
     let time = new Date();
 
     while (true) {
         let newTime = new Date();
         let diff = newTime.getUTCHours() === 0 ? -1 : time.getUTCHours() - newTime.getUTCHours();
-
+        diff = -1;
         if (diff < 0) {
             time = newTime;
 
@@ -103,6 +103,9 @@ const run = async () => {
                 switch (m) {
                     case "total":
                         handleTotal(clients, postman);
+                        break;
+                    case "payout":
+                        handlePayout(clients, postman);
                         break;
                 }
             });
