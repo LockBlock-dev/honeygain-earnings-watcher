@@ -1,0 +1,28 @@
+{
+    "name": "hone-earnings-watcher",
+    "version": "1.0.0",
+    "description": "Send a report of your hourly earning in a channel via a Discord webhook",
+    "main": "index.js",
+    "scripts": {
+        "start": "node src/index.js"
+    },
+    "engines": {
+        "node": ">=14"
+    },
+    "dependencies": {
+        "axios": "^0.24.0",
+        "honeygain.js": "^1.0.0",
+        "humanize-duration": "^3.27.1",
+        "simple-discord-webhooks": "^1.1.1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/LockBlock-dev/honeygain-earnings-watcher.git"
+    },
+    "author": "LockBlock-dev",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/LockBlock-dev/honeygain-earnings-watcher/issues"
+    },
+    "homepage": "https://github.com/LockBlock-dev/honeygain-earnings-watcher#readme"
+}
