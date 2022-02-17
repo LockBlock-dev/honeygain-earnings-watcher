@@ -95,7 +95,7 @@ const run = async () => {
     while (true) {
         let newTime = new Date();
         let diff = newTime.getUTCHours() === 0 ? -1 : time.getUTCHours() - newTime.getUTCHours();
-        diff = -1;
+
         if (diff < 0) {
             time = newTime;
 
