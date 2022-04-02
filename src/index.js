@@ -94,8 +94,9 @@ const run = async () => {
 
     log("Waiting for a balance update...", "info");
 
-    cron.schedule("* */1 * * *", async () => {
-        await delay(config.delay);
+    cron.schedule("0 */1 * * *", async () => {
+        console.log("ran");
+        await delay(config.delay * 1000);
 
         config.modes.forEach((m) => {
             switch (m) {
