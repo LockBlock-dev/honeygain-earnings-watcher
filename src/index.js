@@ -1,5 +1,6 @@
 const fs = require("fs");
 const axios = require("axios").default;
+const cron = require("node-cron");
 const { Client } = require("honeygain.js");
 const { Webhook } = require("simple-discord-webhooks");
 const { log, delay, getOld } = require("./util.js");
@@ -19,11 +20,14 @@ config.authTokens.forEach((token) => {
     clients.push(client);
 });
 
-const init = async (client) => {
+const init = async (client, i) => {
     try {
         await client.me();
     } catch (e) {
-        log("Couldn't log into HoneyGain, check your Authorization token!", "warn");
+        log(
+            `Couldn't log into HoneyGain (account ${i + 1}), check your Authorization token!`,
+            "warn"
+        );
         return false;
     }
 
@@ -50,7 +54,7 @@ const run = async () => {
     log(`Welcome to HoneyGain Earnings Watcher v${pkg.version}`, "success");
 
     for (let i = 0; i < clients.length; i++) {
-        let test = await init(clients[i]);
+        let test = await init(clients[i], i);
 
         if (!test) process.exit(1);
 
@@ -90,34 +94,22 @@ const run = async () => {
 
     log("Waiting for a balance update...", "info");
 
-    let time = new Date();
+    cron.schedule("* * */1 * * *", async () => {
+        await delay(config.delay);
 
-    while (true) {
-        let newTime = new Date();
-        let diff = 0;
+        config.modes.forEach((m) => {
+            switch (m) {
+                case "total":
+                    handleTotal(clients, postman);
+                    break;
+                case "payout":
+                    handlePayout(clients, postman);
+                    break;
+            }
+        });
 
-        if (newTime.getUTCHours() === 0 && time.getUTCHours() !== 0) diff = -1;
-        else diff = time.getUTCHours() - newTime.getUTCHours();
-
-        if (diff < 0) {
-            time = newTime;
-
-            config.modes.forEach((m) => {
-                switch (m) {
-                    case "total":
-                        handleTotal(clients, postman);
-                        break;
-                    case "payout":
-                        handlePayout(clients, postman);
-                        break;
-                }
-            });
-
-            await checkUpdate();
-        }
-
-        await delay(1000 * 60);
-    }
+        await checkUpdate();
+    });
 };
 
 run();

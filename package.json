@@ -1,6 +1,6 @@
 {
     "name": "hone-earnings-watcher",
-    "version": "1.1.2",
+    "version": "1.2.0",
     "description": "Send a report of your hourly earning in a channel via a Discord webhook",
     "main": "index.js",
     "scripts": {
@@ -13,6 +13,7 @@
         "axios": "^0.24.0",
         "honeygain.js": "^1.0.0",
         "humanize-duration": "^3.27.1",
+        "node-cron": "^3.0.0",
         "simple-discord-webhooks": "^1.1.1"
     },
     "repository": {
