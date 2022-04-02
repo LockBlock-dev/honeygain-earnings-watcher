@@ -53,61 +53,61 @@ const checkUpdate = async () => {
 const run = async () => {
     log(`Welcome to HoneyGain Earnings Watcher v${pkg.version}`, "success");
 
-    // for (let i = 0; i < clients.length; i++) {
-    //     let test = await init(clients[i], i);
+    for (let i = 0; i < clients.length; i++) {
+        let test = await init(clients[i], i);
 
-    //     if (!test) process.exit(1);
+        if (!test) process.exit(1);
 
-    //     const me = await clients[i].me();
-    //     clients[i].ref = me.data.referral_code;
-    //     clients[i].email = me.data.email;
+        const me = await clients[i].me();
+        clients[i].ref = me.data.referral_code;
+        clients[i].email = me.data.email;
 
-    //     if (!fs.existsSync("./data/")) fs.mkdirSync("./data");
-    //     if (!fs.existsSync(`./data/${clients[i].ref}`)) fs.mkdirSync(`./data/${clients[i].ref}`);
+        if (!fs.existsSync("./data/")) fs.mkdirSync("./data");
+        if (!fs.existsSync(`./data/${clients[i].ref}`)) fs.mkdirSync(`./data/${clients[i].ref}`);
 
-    //     files.forEach(async (f) => {
-    //         if (!fs.existsSync(`./data/${clients[i].ref}/${f}.json`))
-    //             fs.writeFileSync(`./data/${clients[i].ref}/${f}.json`, "{}");
+        files.forEach(async (f) => {
+            if (!fs.existsSync(`./data/${clients[i].ref}/${f}.json`))
+                fs.writeFileSync(`./data/${clients[i].ref}/${f}.json`, "{}");
 
-    //         if (Object.entries(getOld(clients[i].ref, f)).length === 0) {
-    //             log(`No previous ${f} detected, downloading...`, "info");
-    //             let data;
+            if (Object.entries(getOld(clients[i].ref, f)).length === 0) {
+                log(`No previous ${f} detected, downloading...`, "info");
+                let data;
 
-    //             switch (f) {
-    //                 case "today":
-    //                     data = await clients[i].today();
-    //                     break;
-    //                 case "balances":
-    //                     data = await clients[i].balances();
-    //                     break;
-    //             }
+                switch (f) {
+                    case "today":
+                        data = await clients[i].today();
+                        break;
+                    case "balances":
+                        data = await clients[i].balances();
+                        break;
+                }
 
-    //             fs.writeFileSync(
-    //                 `./data/${clients[i].ref}/${f}.json`,
-    //                 JSON.stringify(data, null, 1),
-    //                 "utf8"
-    //             );
-    //             log(`Previous ${f} downloaded`, "success");
-    //         }
-    //     });
-    // }
+                fs.writeFileSync(
+                    `./data/${clients[i].ref}/${f}.json`,
+                    JSON.stringify(data, null, 1),
+                    "utf8"
+                );
+                log(`Previous ${f} downloaded`, "success");
+            }
+        });
+    }
 
     log("Waiting for a balance update...", "info");
 
     cron.schedule("* */1 * * *", async () => {
-        console.log("ran");
-        // await delay(config.delay);
-        // config.modes.forEach((m) => {
-        //     switch (m) {
-        //         case "total":
-        //             handleTotal(clients, postman);
-        //             break;
-        //         case "payout":
-        //             handlePayout(clients, postman);
-        //             break;
-        //     }
-        // });
-        // await checkUpdate();
+        await delay(config.delay);
+
+        config.modes.forEach((m) => {
+            switch (m) {
+                case "total":
+                    handleTotal(clients, postman);
+                    break;
+                case "payout":
+                    handlePayout(clients, postman);
+                    break;
+            }
+        });
+        await checkUpdate();
     });
 };
 
