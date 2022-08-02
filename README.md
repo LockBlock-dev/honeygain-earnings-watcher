@@ -25,7 +25,7 @@ module.exports = {
 
     delay: 40, //delay before updating earnings
 
-    jmpt: false, //if you are using JumpTask
+    jmpt: false, //if you are using JumpTask set it to true
 };
 ```
 
