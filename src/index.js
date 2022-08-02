@@ -75,8 +75,12 @@ const run = async () => {
 
                 switch (f) {
                     case "today":
-                        if (config.jmpt) data = await clients[i].jumpTaskToday();
-                        else data = await clients[i].today();
+                        data = await clients[i].today();
+
+                        if (config.jmpt) {
+                            const jumpTaskData = await clients[i].jumpTaskToday();
+                            data = Object.assign(data, jumpTaskData);
+                        }
                         break;
                     case "balances":
                         if (config.jmpt) data = {};
