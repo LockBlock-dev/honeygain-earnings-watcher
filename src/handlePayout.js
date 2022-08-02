@@ -1,6 +1,6 @@
 const { log, getNew } = require("./util.js");
 
-module.exports = async (clients, postman) => {
+module.exports = async (clients, postman, jmpt) => {
     const embed = {
         title: "HoneyGain gains report",
         thumbnail: {
@@ -12,25 +12,27 @@ module.exports = async (clients, postman) => {
         },
     };
 
-    const emails = [];
+    if (!jmpt) {
+        const emails = [];
 
-    for (let i = 0; i < clients.length; i++) {
-        let newBalances = await getNew(clients[i], "balances");
+        for (let i = 0; i < clients.length; i++) {
+            let newBalances = await getNew(clients[i], "balances");
 
-        if (newBalances.data.payout.credits >= newBalances.data.min_payout.credits) {
-            emails.push(clients[i].email);
+            if (newBalances.data.payout.credits >= newBalances.data.min_payout.credits) {
+                emails.push(clients[i].email);
+            }
         }
-    }
 
-    if (emails.length > 0) {
-        embed.color = 0x00bb6e;
-        embed.description = "Payout available!";
-        embed.fields.push({
-            name: "The following emails can redeem their earnings",
-            value: `\`\`\`${emails.join("\n")}\`\`\``,
-        });
+        if (emails.length > 0) {
+            embed.color = 0x00bb6e;
+            embed.description = "Payout available!";
+            embed.fields.push({
+                name: "The following emails can redeem their earnings",
+                value: `\`\`\`${emails.join("\n")}\`\`\``,
+            });
 
-        log("Payout report sent", "success");
-        postman.send(null, [embed]);
+            log("Payout report sent", "success");
+            postman.send(null, [embed]);
+        }
     }
 };

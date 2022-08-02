@@ -75,10 +75,12 @@ const run = async () => {
 
                 switch (f) {
                     case "today":
-                        data = await clients[i].today();
+                        if (config.jmpt) data = await clients[i].jumpTaskToday();
+                        else data = await clients[i].today();
                         break;
                     case "balances":
-                        data = await clients[i].balances();
+                        if (config.jmpt) data = {};
+                        else data = await clients[i].balances();
                         break;
                 }
 
@@ -103,7 +105,7 @@ const run = async () => {
                     handleTotal(clients, postman);
                     break;
                 case "payout":
-                    handlePayout(clients, postman);
+                    handlePayout(clients, postman, config.jmpt);
                     break;
             }
         });
