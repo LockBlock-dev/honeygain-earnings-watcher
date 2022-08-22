@@ -10,7 +10,7 @@ const config = require("../config.js");
 const pkg = require("../package.json");
 
 const postman = new Webhook(config.discordWebhookURL);
-const webhookReg = /https:\/\/discord.com\/api\/webhooks\/\d{18}\/.+/;
+const webhookReg = /https:\/\/discord.com\/api\/webhooks\/\d{18,}\/.+/;
 const files = ["today", "balances"];
 const clients = [];
 
